@@ -1,0 +1,5 @@
+.idea
+modularMarkdown.iml
+node_modules
+old
+generated-tests
