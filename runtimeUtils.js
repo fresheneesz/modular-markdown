@@ -494,8 +494,10 @@ function searchForKey(object, value) {
 function resetPageButton() {
   var button = createButton("Reset Page")
   button.addEventListener('click', function() {
-    const origin = location.origin !== "null" ? location.origin : location.protocol+"//"
-    window.location = origin+location.pathname
+    if(confirm("Are you sure you want to reset the page?")) {
+      const origin = location.origin !== "null" ? location.origin : location.protocol+"//"
+      window.location = origin+location.pathname
+    }
   })
   return button
 }

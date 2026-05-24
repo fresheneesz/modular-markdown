@@ -27,7 +27,6 @@ function build(entryFile, outFile, handleWarnings) {
           path: path.dirname(path.resolve(outFile)),
           filename: path.basename(outFile),
           libraryTarget: "umd", // makes bundled module require-able
-          clean: true,
         },
         optimization: {
           minimize: true,

@@ -12,19 +12,34 @@ npm install modular-markdown
 
 ### Usage
 
+##### Processing a markdown template
+
+```javascript
+var {processDirectory} = require("../modular-markdown")
+await processDirectory("input-directory", "output-directory")
 ```
-var {template, textbox, /* other imports... */} = require("../modular-markdown")
 
+`processDirectory(inputRoot, outputRoot, options)` - Traverses a directory and outputs one of three things into the `outputRoot`, in the same directory structure as that of `inputRoot`:
 
-```
+A. If its a modular markdown javascript template, process it into an html.
+B. If its a basic markdown file, processes it into a static html file.
+C. Otherwise, copies the file verbatim.
 
+* `inputRoot` - A directory that will be traversed for modular-markdown template files.
+* `outputRoot` - The directory that generated html files will be output to.
+* `options` - Optional parameters with the following possible options:
+  * `templateExtension` - (Default: ".mm.js") Files in the `inputRoot` with this file extension will be considered modular markdown (mm) templates and will be used to generate modular-markdown html files.
+  * `ignoreDirectories` - (Default: []) Directories in the `inputRoot` to ignore. They should be paths relative to `inputRoot`.
 
+`processFile(filename, templateExtension, inputRoot, outputRoot)` - Processes a single file
 
-### Creating a markdown template
+##### Creating a markdown template
 
 To create a template, call the `template` function with a function that takes some parameters and returns markdown.
 
 ```javascript
+var {template, textbox, /* other imports... */} = require("../modular-markdown")
+
 module.exports = template(function(exampleParam1, exampleParam2) {
 	return `
 		# Example header
@@ -42,7 +57,7 @@ module.exports = template(function(exampleParam1, exampleParam2) {
 }))
 ```
 
-### Merging markdown
+##### Merging markdown
 
 To inherit from another markdown template, load the template as a module, call it similar to how a template is created, and export the result. Headers with the same name will be merged, the default being that the inherited text will appear first.
 
@@ -74,7 +89,7 @@ module.exports = exampleTemplate('example arg1', 'example arg2', function(exampl
 
 ```
 
-### Inputs
+##### Inputs
 
 A markdown template can have up to one list of inputs. These are inputs that a user can interact with to change the page. When a template is inherited from another, its input list is also inherited.
 
@@ -124,7 +139,7 @@ module.exports = exampleTemplate(function() {
     * `link` - (*Optional*) A url to link the label to.
     * `desc` - (*Optional*) A description to write below the input.
 
-#### Input elements
+###### Input elements
 
 The following functions create input element descriptors intended to be passed into `this.inputs`.
 
@@ -158,7 +173,7 @@ The following functions create input element descriptors intended to be passed i
 
 ### Active elements
 
-These are functions you can call inline to insert an active element. Each is given an `id` which can be used to access the element from inheriting templates. 
+An active element changes based on the value of an input (or inputs).
 
 * `this.input(name)` - Gets an object representing the input of the passed `name`. The return value has the following members:
   * `value` - This returns html that will actively update to the input value when the input value changes.

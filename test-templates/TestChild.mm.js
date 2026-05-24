@@ -1,6 +1,6 @@
 var {template, text, textbox, combobox, list, map, override, mapInputs} = require("../modular-markdown")
 
-var basicTemplate = require("./Test.js")
+var basicTemplate = require("./Test.mm.js")
 
 module.exports = basicTemplate('test param', function() {
     return `
