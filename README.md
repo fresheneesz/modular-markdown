@@ -178,3 +178,8 @@ An active element changes based on the value of an input (or inputs).
 * `this.input(name)` - Gets an object representing the input of the passed `name`. The return value has the following members:
   * `value` - This returns html that will actively update to the input value when the input value changes.
   * `map(callback)` - This will return an html element that will actively update. When the input value changes, the `callback` will be called with the input's value, and the active html element will get the value returned from the `callback`.  **Note** that this function will be **called at runtime** and so doesn't have access to any template modules or variables (and should only really use other inputs to generate the resulting value.)
+
+### Developing modular-markdown
+
+* Run `node build.js` to update the generated `runtimeUtils` bundle in dist. 
+* Run `node test-generate.js` to build the test templates, which you can then open and test as standalone html files.
