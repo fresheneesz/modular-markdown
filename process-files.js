@@ -40,7 +40,7 @@ var processFile = exports.processFile = async function (filename, templateExtens
     await fs.mkdir(path.dirname(releaseFilePath), {recursive:true})
     if(isTemplate || isMarkdown) {
         if(isTemplate) {
-            var contents = require(sourceFilePath).generate()
+            var contents = require(path.resolve(sourceFilePath)).generate()
         } else if(isMarkdown) {
             var contents = (await fs.readFile(sourceFilePath)).toString()
         }

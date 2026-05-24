@@ -182,4 +182,4 @@ An active element changes based on the value of an input (or inputs).
 ### Developing modular-markdown
 
 * Run `node build.js` to update the generated `runtimeUtils` bundle in dist. 
-* Run `node test-generate.js` to build the test templates, which you can then open and test as standalone html files.
+* Run `node test-generate.js` to build the test templates, which you can then open the html files without a webserver.
