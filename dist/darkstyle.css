@@ -81,3 +81,20 @@ input {
     margin-top: 3px;
     margin-bottom: 3px;
 }
+.inputElement {
+    display: inline-block;
+}
+.optionsList {
+    position: absolute;
+    box-sizing: border-box;
+    width: 250px;
+    background: white;
+    border: solid 1px black;
+    color: black;
+}
+.optionsList div {
+    cursor: pointer;
+}
+.optionsList div:hover {
+    background-color: lightblue;
+}

@@ -162,17 +162,64 @@ var moduleExports = (function() {
       this.input.setAttribute("autocomplete", "off")
 
       if (options.values) {
-        var datalist = document.createElement('datalist')
-        datalist.id = listId
-        options.values.forEach(function(value) {
-          var option = document.createElement('option')
-          option.value = value
-          datalist.appendChild(option)
+        this.optionsList = document.createElement('div')
+        this.optionsList.classList.add('optionsList')
+        options.values.forEach(value => {
+          var option = document.createElement('div')
+          option.append(value)
+
+          var selectOption = () => {
+            this.input.value = value
+            this.optionsList.style.display = "none"
+          }
+          option.addEventListener("click", selectOption)
+          option.addEventListener("pointerup", selectOption)
+
+          this.optionsList.appendChild(option)
         })
-        this.node.appendChild(datalist)
+
+        this.optionsList.style.display = "none"
+        this.input.after(this.optionsList)
+
+        this.input.addEventListener("focus", () => {
+          this.optionsList.style.display = ""
+        })
+
+        addCrossDeviceClickListener(document, event => {
+          if(!eventIsOverElement(event, this.optionsList) && !eventIsOverElement(event, this.input)) {
+            this.optionsList.style.display = "none"
+          }
+        })
       }
     }
   })
+
+  function addCrossDeviceClickListener(element, handler) {
+    var pointerId;
+
+    function downHandler(event) {
+      pointerId = event.pointerId
+    }
+    function upHandler(event) {
+      if(pointerId === event.pointerId) {
+        handler(event)
+      }
+    }
+
+    element.addEventListener("click", handler)
+    element.addEventListener("pointerup", upHandler)
+    element.addEventListener("pointerdown", downHandler)
+  }
+
+  function eventIsOverElement(event, element) {
+    const rect = element.getBoundingClientRect()
+    return (
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom
+    )
+  }
 
   // A list of items of a particular type.
   // args:
