@@ -1,4 +1,4 @@
-var {template, text, textbox, combobox, list, map, override, mapInputs} = require("../modular-markdown")
+var {template, textbox, combobox, list, map, override, mapInputs} = require("../modular-markdown")
 
 module.exports = template(function(parameter) {
     return `

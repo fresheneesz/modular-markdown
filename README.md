@@ -138,6 +138,7 @@ module.exports = exampleTemplate(function() {
     * `input` - An input element descriptor (returned by input element functions like `combobox`)
     * `link` - (*Optional*) A url to link the label to.
     * `desc` - (*Optional*) A description to write below the input.
+    * `tooltip` - (*Optional*) A tooltip to display on hover over the input name. 
 
 ###### Input elements
 

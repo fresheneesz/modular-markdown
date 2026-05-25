@@ -65,11 +65,11 @@ const template = exports.template = function(callback) {
           }
 
           if (desc) {
-            var markedDescription = trimIndent(marked(desc))
+            var markedDescription = desc//trimIndent(marked(desc))
           }
 
           //this.inputsOverridesCreated = true
-          return "<div class='input' ${title}>"+
+          return `<div class='input' ${title}>`+
             "<span class='label'>"+label+"</span>: "+ (desc? "<span class='desc'>"+markedDescription+"</span><div class='inputContent'>"+inputContent+'</div>': inputContent)
           +"</div>"
 
