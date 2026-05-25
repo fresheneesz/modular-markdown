@@ -1,5 +1,7 @@
 // This file contains the code needed to merge markdown files together.
 
+var {strmult} = require("./template-utils")
+
 // Takes two markdown-like inputs (content and childPage) and merge the content of their sections together.
 // # headings can also be post-pended with 'b', 'a', or 'r' (eg ##b or ###r)
   // b - Places content before inherited content.
@@ -204,12 +206,4 @@ function loopThroughSections(sections, callback) {
       loopThroughSections(section.subsections, callback)
     }
   }
-}
-
-function strmult(string, multiplier) {
-    var result = []
-    for(var n=0; n<multiplier; n++) {
-        result.push(string)
-    }
-    return result.join('')
 }

@@ -1,25 +1,11 @@
 
-var trimIndentDelimiter = '--trimIndentDel1imiter--'
-
 // This function is being used because multi-line strings using the grave accent (`) take in all the whitespace of the indents.
 // Without using this function, your multi-line strings cannot be properly indented with the rest of the source code.
 var trimIndent = exports.trimIndent = function(string) {
-  var trimmedString = trimFirstLine(string)
+  var trimmedString = fixFirstlineIndent(string)
   var indent = findLeastIndent(trimmedString)
   var openDelimiterFound = false
   return trimmedString.trim().split('\n').map(function(line, n) {
-    var lineMatchesDelmiter = line === trimIndentDelimiter
-    if(!openDelimiterFound && lineMatchesDelmiter) {
-      openDelimiterFound = true
-      return ''
-    } else if(openDelimiterFound && lineMatchesDelmiter) {
-      openDelimiterFound = false
-      return ''
-    }
-    if(openDelimiterFound) {
-      return line
-    }
-
     if(n == 0) {
       return line
     } else {
@@ -28,68 +14,81 @@ var trimIndent = exports.trimIndent = function(string) {
   }).join('\n')
 }
 
-// This should be used to trim the indent of strings that are placed inside a template literal that is trimmed by trimIndent.
-// This trims the indent and adds additional markup to ensure the indents match correctly. Its recommended this be assigned a
-// short single-character function name like `t`.
-// For example:
-// var string = trimIndent(`
-//   some content
-//   more content
-//   ${something ?
-//     trimInternalIndent(`
-//       even more content
-//       `) : ''
-//   }
-//   `)
-//
-// If `something` is true, this will result in the same thing as:
-// "some content\n"+
-// "more content\n"+
-// "even more content\n"
-exports.trimIndentInner = function(string) {
-  return '\n'+trimIndentDelimiter+'\n'+trimIndent(string)+'\n'+trimIndentDelimiter+'\n'
+// This makes sure that the first line's indent is consistent with the rest of the string.
+function fixFirstlineIndent(string) {
+  var leastIndent = findMainIndent(string)
+  var firstNewline = string.indexOf('\n')
+  var firstLine = string.slice(0,firstNewline)
+
+  var firstNonSpaceCharIndex = 0
+  for(var n=0; firstLine[n] === " " && n<firstLine.length; n++) {
+    firstNonSpaceCharIndex++
+  }
+
+  return strmult(" ", leastIndent)+firstLine.slice(firstNonSpaceCharIndex)+string.slice(firstNewline)
+}
+
+// Finds the indent excluding the first line.
+exports.findMainIndent = findMainIndent
+function findMainIndent(string) {
+  var firstNewline = string.indexOf('\n')
+  return findLeastIndent(string.slice(firstNewline))
+}
+
+exports.trimFinalEmptyLine = function(string) {
+  if(string[string.length-1] === '\n') {
+    return string.slice(0, -1)
+  } else {
+    return string
+  }
+}
+
+exports.strmult = strmult
+function strmult(string, multiplier) {
+    var result = []
+    for(var n=0; n<multiplier; n++) {
+        result.push(string)
+    }
+    return result.join('')
 }
 
 // Trims the first set of spaces and first newline if nothing else is on the line.
 function trimFirstLine(string) {
   for(var n=0; n<string.length; n++) {
     if(string[n] !== ' ') {
-      if(string[n] === '\n') {
-        return string.slice(n+1)
-      } else {
-        return string.slice(n)
-      }
+      return string.slice(n)
     }
   }
   return ''
 }
 
+exports.findLeastIndent = findLeastIndent
 function findLeastIndent(string) {
   var leastIndent = Infinity
   var openDelimiterFound = false
   string.split('\n').forEach((line) => {
-    var lineMatchesDelmiter = line === trimIndentDelimiter
-    if(!openDelimiterFound && lineMatchesDelmiter) {
-      openDelimiterFound = true
-    } else if(openDelimiterFound && lineMatchesDelmiter) {
-      openDelimiterFound = false
-      return
-    }
-    if(openDelimiterFound) {
-      return // continue
-    }
-
-    var indent = 0
-    for(var n=0; n<line.length; n++) {
-      if(line[n] === ' ') {
-        indent++
-      } else {
-        if(indent < leastIndent) {
-          leastIndent = indent
+    if(line.length === 0) {
+      return // Skip empty lines
+    } else {
+      var indent = 0
+      for(var n=0; n<line.length; n++) {
+        if(line[n] === ' ') {
+          indent++
+        } else if(line[n] === '\n') {
+          return // Skip white-space only lines
+        } else {
+          if(indent < leastIndent) {
+            leastIndent = indent
+          }
+          break
         }
-        break
       }
     }
   })
-  return leastIndent
+
+  if(leastIndent === Infinity) {
+    return 0
+  } else {
+    return leastIndent
+  }
 }

@@ -2,7 +2,7 @@ var fs = require("fs").promises
 var path = require("path")
 var url = require('url')
 
-var {processDirectory} = require("./modular-markdown")
+var {processDirectory} = require("../modular-markdown")
 
 ;(async function() {
 try {

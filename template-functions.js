@@ -1,7 +1,7 @@
 var marked = require("marked")
 
 var {createPage} = require("./markdown-merge")
-var {trimIndent} = require("./template-utils")
+var {trimIndent, trimFinalEmptyLine, findMainIndent, strmult} = require("./template-utils")
 
 const template = exports.template = function(callback) {
   var createThisMethods = function(inputRegistry, templateFunction, parentTemplateFunction) {
@@ -65,7 +65,10 @@ const template = exports.template = function(callback) {
           }
 
           if (desc) {
-            var markedDescription = desc//trimIndent(marked(desc))
+            var indent = findMainIndent(desc)
+            var markedDesc = marked(trimIndent(desc))
+            var indentedMarkedDesc = markedDesc.split('\n').map(line => strmult(' ', indent)+line).join('')
+            var markedDescription = trimFinalEmptyLine(indentedMarkedDesc) //trimIndentForInner(marked(desc))//trimIndent(marked(desc))
           }
 
           //this.inputsOverridesCreated = true
@@ -162,7 +165,8 @@ const template = exports.template = function(callback) {
 
   templateFunction._generate = function(inputRegistry, argsToPass) {
     inputRegistry[templateFunction.inputListId] = {} // Why is this being set here? It seems to be already set on lines 35 or 38.
-    return createPage(trimIndent(callback.apply(createThisMethods(inputRegistry, templateFunction), argsToPass) || ""))
+    var templateOutput = callback.apply(createThisMethods(inputRegistry, templateFunction), argsToPass)
+    return createPage(trimIndent(templateOutput || ""))
   }
 
   // External generate, initializes the whole page.

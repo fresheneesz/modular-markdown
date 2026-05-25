@@ -1,4 +1,4 @@
-var {template, textbox, combobox, list, map, override, mapInputs} = require("../modular-markdown")
+var {template, textbox, combobox, list, map, override, mapInputs} = require("../../modular-markdown")
 
 var basicTemplate = require("./Test.mm.js")
 
