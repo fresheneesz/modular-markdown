@@ -1,5 +1,5 @@
 { "name": "modular-markdown",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "main": "modular-markdown.js",
   "dependencies": {
     "emitter-b": "^1.0.0",

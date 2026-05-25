@@ -75,8 +75,8 @@ const template = exports.template = function(callback) {
 
           //this.inputsOverridesCreated = true
           return `<div class='input' ${title}>`+
-            "<span class='label'>"+label+"</span>: "+
-            (desc? "<span class='desc'>"+markedDescription+"</span><div class='inputContent'>"+inputContent+'</div>': inputContent)
+            "<span class='label'>"+label+":</span> "+ inputContent +
+            (desc? "<div class='desc'>"+markedDescription+"</div>": '')
           +"</div>"
 
         // Note that this join can't have line breaks in it because it will mess up the indent resulting in whitespace not getting trimmed.

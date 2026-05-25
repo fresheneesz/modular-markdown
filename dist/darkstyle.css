@@ -54,6 +54,7 @@ input {
 
 .label {
     font-weight: bold;
+    vertical-align: top;
 }
 
 .button {
@@ -68,15 +69,10 @@ input {
     user-select: none;
 }
 
-.desc p {
-    display: inline;
-    /*margin-left: 20px;*/
-}
-
 .input {
     margin-bottom: 4px;
 }
-.inputContent {
+.desc p {
     margin-left: 20px;
     margin-top: 3px;
     margin-bottom: 3px;
