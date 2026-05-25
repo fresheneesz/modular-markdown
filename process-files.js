@@ -5,12 +5,12 @@ var url = require('url')
 var marked = require("marked")
 var fwalk = require('kc-fwalk')
 
-exports.processDirectory = async function(inputRoot, outputRoot, {templateExtension = ".mm.js", ignoreDirectories = []} = {}) {
+exports.processDirectory = async function(inputRoot, outputRoot, {templateExtension = ".mm.js", ignorePaths = []} = {}) {
     await fs.mkdir(outputRoot, {recursive: true})
     await fs.copyFile(__dirname+"/dist/darkstyle.css", outputRoot+"/darkstyle.css")
     await fs.copyFile(__dirname+"/dist/runtimeUtils.umd.js", outputRoot+"/runtimeUtils.umd.js")
 
-    await Promise.all(getFilenames(inputRoot, ignoreDirectories).map(async function(filename) {
+    await Promise.all(getFilenames(inputRoot, ignorePaths).map(async function(filename) {
         await processFile(filename, templateExtension, path.resolve(inputRoot), path.resolve(outputRoot))
     }))
 
@@ -57,15 +57,17 @@ function hasExtension(filename, extension) {
 }
 
 // Gets the filenames to copy.
-function getFilenames(srcDirectory, ignoreDirectories) {
+function getFilenames(srcDirectory, ignorePaths) {
   var filenames = []//'README.md']
+  var absoluteIgnoreDirectories = ignorePaths.map(dir => normalizePathSep(srcDirectory+"/"+dir))
+
   fwalk(srcDirectory, true).forEach(function(filename) {
     // Filter out non-project directories
-    for(var n=0; n<ignoreDirectories.length; n++) {
-      if(filename.indexOf("./"+ignoreDirectories[n]) === 0) return // Ignore file in that directory.
+    for(var n=0; n<absoluteIgnoreDirectories.length; n++) {
+      if(normalizePathSep(filename).indexOf(absoluteIgnoreDirectories[n]) === 0) return // Ignore file in that directory.
     }
 
-      filenames.push(filename)
+    filenames.push(filename)
   })
   return filenames
 }
