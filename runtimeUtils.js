@@ -441,7 +441,13 @@ var moduleExports = (function() {
 
   // Gets the value of an Input and dynamically changes as the input changes.
   function input(inputListId, inputName, valueId) {
-    inputMapping(inputListId, inputName, valueId, v => JSON.stringify(v))
+    inputMapping(inputListId, inputName, valueId, v => {
+      if(typeof(v) === 'object') {
+        return JSON.stringify(v)
+      } else {
+        return v
+      }
+    })
   }
 
   function inputMapping(inputListId, inputName, valueId, mappingFn) {
