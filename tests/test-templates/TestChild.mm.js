@@ -20,17 +20,11 @@ module.exports = basicTemplate('test param', function() {
         
         Textbox in child content: ${this.input("Textbox In Child").value}
         
-        
-
         # Basic test
 
-        Adding more
-
-        ##b Section A
-
-        First
+        ##b Parameters
         
-        Inputs at the end:
+        Inputs earlier:
 
         ${this.inputs({
             "Textbox 2": {input: override(
@@ -63,6 +57,12 @@ module.exports = basicTemplate('test param', function() {
             })},
             "Textbox In Child": {input: textbox()},
         })}
+        
+        Adding more
+
+        ##b Section A
+
+        First      
 
         ##a Section B
 

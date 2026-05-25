@@ -116,15 +116,15 @@ module.exports = exampleTemplate(function() {
 		# Example header
 		
 		${this.inputs({
-        	Input1: override(hidden(), '3'), // Hard coding the value to '3'
-        	Input2: override(
+        	Input1: {input: override(hidden(), '3')}, // Hard coding the value to '3'
+        	Input2: {input: override(
         		combobox({values: ["Alice", "Bob", "Carol"]}), 
         		mapInputs('Input2', 'Input1', function(input2Value, input1Value) {
                     // Gets the value of Input2 and Input1 and concatenates them 
                     // as the value that will be given to the parent Input2.
         			return input2Value + input1Value
         		}
-        	)
+        	)}
     	})}
 	`
 }))

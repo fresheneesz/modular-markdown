@@ -85,8 +85,20 @@ const template = exports.template = function(callback) {
         var hideScript = ''
         if(parentTemplateFunction) {
           hideScript =
-            `<script>document.getElementById(${parentTemplateFunction.inputListId}).style.display = 'none' // Hide the parent input list.
-            </script>`
+            "<script>;(function() {"+
+              // Hide the parent input list.
+              `var element = document.getElementById(${parentTemplateFunction.inputListId});`+
+              "if(element) {" +
+                "element.style.display = 'none';"+
+              "} else {"+
+                // Do this asynchronously so the rest of the page has a chance to load first.
+                "setTimeout(() => {" +
+                  `var element = document.getElementById(${parentTemplateFunction.inputListId});`+
+                  "element.style.display = 'none';" +
+                  "}, 0);"+
+              "}" +
+            "})()"+
+            "</script>"
         }
 
         return `<div id='${templateFunction.inputListId}'>${renderedInputList}</div>` + hideScript

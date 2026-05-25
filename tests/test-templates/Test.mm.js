@@ -18,6 +18,14 @@ module.exports = template(function(parameter) {
 
         The passed parameter: ${parameter}
 
+        ## Section A
+        Section A text
+
+        ## Section B
+        Section B text
+        
+        ## Inputs
+        
         ${this.inputs({
             "Textbox 1": {
               link: 'http://www.google.com', desc: "This describes what the textbox is for.", 
@@ -71,12 +79,6 @@ module.exports = template(function(parameter) {
               defaultValue: [{key:'On Your Person', value: ['a','b','c']}]
             })}
         })}
-
-        ## Section A
-        Section A text
-
-        ## Section B
-        Section B text
 
         ## Section R
         This will be replaced
