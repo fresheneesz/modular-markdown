@@ -170,6 +170,7 @@ var moduleExports = (function() {
 
           var selectOption = () => {
             this.input.value = value
+            this.emit('change')
             this.optionsList.style.display = "none"
           }
           option.addEventListener("click", selectOption)
