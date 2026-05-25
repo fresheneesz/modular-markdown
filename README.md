@@ -29,7 +29,7 @@ C. Otherwise, copies the file verbatim.
 * `outputRoot` - The directory that generated html files will be output to.
 * `options` - Optional parameters with the following possible options:
   * `templateExtension` - (Default: ".mm.js") Files in the `inputRoot` with this file extension will be considered modular markdown (mm) templates and will be used to generate modular-markdown html files.
-  * `ignoreDirectories` - (Default: []) Directories in the `inputRoot` to ignore. They should be paths relative to `inputRoot`.
+  * `ignorePaths` - (Default: []) Directories in the `inputRoot` to ignore. They should be paths relative to `inputRoot`.
 
 `processFile(filename, templateExtension, inputRoot, outputRoot)` - Processes a single file
 
