@@ -21,6 +21,7 @@ var processFile = exports.processFile = async function (filename, templateExtens
     var basename = path.basename(filename)
     var dirname = path.dirname(filename)
     var sourceFilePath = filename
+    var relativeDirectory = normalizePathSep(dirname).slice(normalizePathSep(inputRoot).length) // Relative to the inputRoot.
 
     var isTemplate = hasExtension(filename, templateExtension)
     var isMarkdown = hasExtension(filename, ".md")
@@ -31,16 +32,16 @@ var processFile = exports.processFile = async function (filename, templateExtens
             var suffixLength = 3
         }
         var releaseFileName = basename.slice(0, -suffixLength)+".html"
-        var baseDirectoryPath = strmult("../", dirname.split('/').length-2)
+        var baseDirectoryPath = strmult("../", relativeDirectory.split('/').length-1)
     } else {
         var releaseFileName = basename
     }
 
-    var releaseFilePath = outputRoot+dirname.slice(inputRoot.length+1)+"/"+releaseFileName
+    var releaseFilePath = outputRoot+relativeDirectory+"/"+releaseFileName
     await fs.mkdir(path.dirname(releaseFilePath), {recursive:true})
     if(isTemplate || isMarkdown) {
         if(isTemplate) {
-            var resultingHtml = require(path.resolve(sourceFilePath)).generate(baseDirectoryPath)
+            var resultingHtml = require(normalizePathSep(sourceFilePath)).generate(baseDirectoryPath)
         } else if(isMarkdown) {
             var resultingHtml = marked((await fs.readFile(sourceFilePath)).toString())
         }
@@ -58,7 +59,7 @@ function hasExtension(filename, extension) {
 // Gets the filenames to copy.
 function getFilenames(srcDirectory, ignoreDirectories) {
   var filenames = []//'README.md']
-  fwalk(srcDirectory).forEach(function(filename) {
+  fwalk(srcDirectory, true).forEach(function(filename) {
     // Filter out non-project directories
     for(var n=0; n<ignoreDirectories.length; n++) {
       if(filename.indexOf("./"+ignoreDirectories[n]) === 0) return // Ignore file in that directory.
@@ -76,4 +77,8 @@ function strmult(str, count) {
         result.push(str)
     }
     return result.join("")
+}
+
+function normalizePathSep(filepath) {
+    return path.resolve(filepath).split(path.sep).join("/")
 }
