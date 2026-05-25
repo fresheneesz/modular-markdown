@@ -80,6 +80,7 @@ module.exports = template(function(parameter) {
 
         ## Section R
         This will be replaced
+        * Testing final bullet point
         `
 })
 
