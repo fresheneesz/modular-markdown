@@ -20,7 +20,7 @@ function build(entryFile, outFile, handleWarnings) {
   return new Promise((resolve, reject) => {
     webpack(
       {
-        mode: "production",
+        mode: "development",
         target: "web", // use "web" for browser bundles
         entry: path.resolve(entryFile),
         output: {

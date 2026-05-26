@@ -387,7 +387,8 @@ var moduleExports = (function() {
 
       if(!options.valueType) throw new Error("Missing `valueType` option to map.")
 
-      options.subargs = {keyType: options.keyType, valueType: options.valueType, valueArgs: options.valueArgs, keyArgs: options.keyArgs}
+      var {keyType, valueType, valueArgs, keyArgs} = options
+      options.subargs = {keyType, valueType, valueArgs, keyArgs}
       options.type = 'mapItem'
       superclass.init.call(this, options)
     }
@@ -411,9 +412,11 @@ var moduleExports = (function() {
   })
 
 
-  var hidden = proto(list, function(superclass) {
+  var hidden = proto(Input, function(superclass) {
     this.init = function(options) {
       superclass.init.call(this, options)
+
+      this.node.parentElement.style.display = "none" // Hide the entry.
     }
   })
 

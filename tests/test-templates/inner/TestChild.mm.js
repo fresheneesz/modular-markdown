@@ -1,4 +1,4 @@
-var {template, textbox, combobox, list, map, override, mapInputs} = require("../../../modular-markdown")
+var {template, textbox, combobox, list, map, override, mapInputs, hidden} = require("../../../modular-markdown")
 
 var basicTemplate = require("../Test.mm.js")
 
@@ -19,6 +19,8 @@ module.exports = basicTemplate('test param', function() {
         Textbox map 4 content: ${this.input("Textbox Map 4").value}
         
         Textbox in child content: ${this.input("Textbox In Child").value}
+        
+        Hidden Textbox List 1: ${this.input("Textbox List 1").value}
         
         # Basic test
 
@@ -56,6 +58,9 @@ module.exports = basicTemplate('test param', function() {
               defaultValue: [{key:'A', value: 'B'}],
             })},
             "Textbox In Child": {input: textbox()},
+            "Textbox List 1": { input: override(hidden(), mapInputs("Textbox 1", function(textbox1){
+              return [textbox1]
+            }))}
         })}
         
         Adding more
