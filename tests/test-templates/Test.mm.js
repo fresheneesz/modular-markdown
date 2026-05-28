@@ -24,14 +24,16 @@ module.exports = template(function(parameter) {
         ## Section B
         Section B text
         
+        ## Move me from below Section B to above it
+        
         ## Inputs
         
         ${this.inputs({
             "Textbox 1": {
               link: 'http://www.google.com', desc: "This describes what the textbox is for.", 
-              input: textbox({defaultValue: 'moose'})
+              input: combobox({defaultValue: 'moose'})
             },
-            "Textbox 2": {input: textbox({defaultValue: 'moose'})},
+            "Textbox 2": {input: combobox({defaultValue: 'moose'})},
             "Combobox 1": {link: 'http://www.google.com', 
               input: combobox({
                 defaultValue: '100',
@@ -43,14 +45,14 @@ module.exports = template(function(parameter) {
               values: ['50', '80', '100', '120', '150']
             })},
             "Textbox List 1": {input: list({
-              type: 'textbox',
+              type: 'combobox',
               subargs: {defaultValue: 'item value'}
             })},
             "Textbox List 2": {input: list({
-              type: 'textbox', defaultValue: [1,2,3]
+              type: 'combobox', defaultValue: [1,2,3]
             })},
             "Textbox Map 1": {input: map({
-              keyType: 'textbox',
+              keyType: 'combobox',
               keyArgs: {
                 defaultValue: 'default value',
               },
@@ -63,17 +65,17 @@ module.exports = template(function(parameter) {
               defaultValue: [{key:'On Your Person', value: 'Host Device'}],
             })},
             "Textbox Map 2": {input: map({
-              keyType: 'textbox', valueType: 'textbox',
+              keyType: 'combobox', valueType: 'combobox',
               defaultValue: [{key:'A', value: 'B'}],
             })},
             "Textbox Map 3": {input: map({
-              keyType: 'textbox',
+              keyType: 'combobox',
               keyArgs: {
                 defaultValue: 'default value',
               },
               valueType: 'list',
               valueArgs: {
-                type: 'textbox', defaultValue: [1,2,3]
+                type: 'combobox', defaultValue: [1,2,3]
               },
               addButtonName: 'Add to Map',
               defaultValue: [{key:'On Your Person', value: ['a','b','c']}]
@@ -93,8 +95,8 @@ module.exports = template(function(parameter) {
 //         Should throw an error: ${this.input("nonexistent")}
 //
 //         ${this.inputs({
-//             "Textbox 1": textbox({link: 'http://www.google.com', defaultValue: 'moose'}),
-//             "Textbox 2": textbox({defaultValue: 'moose'}),
+//             "Textbox 1": combobox({link: 'http://www.google.com', defaultValue: 'moose'}),
+//             "Textbox 2": combobox({defaultValue: 'moose'}),
 //             "Combobox 1": combobox({
 //               link: 'http://www.google.com',
 //               defaultValue: '100',

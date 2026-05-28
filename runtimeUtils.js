@@ -125,6 +125,7 @@ var moduleExports = (function() {
 
   // args:
     // defaultValue
+  // Note this has been made private because combobox is just as good.
   var textbox = proto(Input, function(superclass) {
     this.init = function() {
       superclass.init.apply(this, arguments)
@@ -150,21 +151,14 @@ var moduleExports = (function() {
   // args:
     // id - A unique html id.
     // values - An array of values to display for the combobox.
-  // Note that this combobox sucks because it uses datalist which can't be opened on click.
   var combobox = proto(textbox, function(superclass) {
     this.init = function() {
       superclass.init.apply(this, arguments)
 
-      const listId = 'comoboboxList'+getId() // this.options.listId
-      const options = this.options
-
-      this.input.setAttribute("list", listId)
-      this.input.setAttribute("autocomplete", "off")
-
-      if (options.values) {
+      if (this.options.values) {
         this.optionsList = document.createElement('div')
         this.optionsList.classList.add('optionsList')
-        options.values.forEach(value => {
+        this.options.values.forEach(value => {
           var option = document.createElement('div')
           option.append(value)
 
@@ -426,20 +420,25 @@ var moduleExports = (function() {
 
     if (options.mapInputDescriptor) {
       eval(`var mapFunction = `+JSON.parse(options.mapInputDescriptor.mapFunction))
-
-      listeners.push(() => {
-        const parentInput = getElementById(options.parentInputId).inputObject
-
-        var inputNodes = options.mapInputDescriptor.inputNames.map((inputName) => getInputNode(_inputListId, inputName))
-        for (const inputNode of inputNodes) {
-          inputNode.inputObject.on('change', function() {
-            parentInput.setValue(mapFunction(
-              ...inputNodes.map((inputNode) => inputNode.inputObject.value())
-            ))
-          })
-        }
-      })
+    } else {
+      var mapFunction = v => v
+      options.mapInputDescriptor = {inputNames: []}
     }
+
+
+
+    listeners.push(() => {
+      const parentInput = getElementById(options.parentInputId).inputObject
+
+      var inputNodes = options.mapInputDescriptor.inputNames.map((inputName) => getInputNode(_inputListId, inputName))
+      for (const inputNode of inputNodes) {
+        inputNode.inputObject.on('change', function() {
+          parentInput.setValue(mapFunction(
+            ...inputNodes.map((inputNode) => inputNode.inputObject.value())
+          ))
+        })
+      }
+    })
   }
 
   // Gets the value of an Input and dynamically changes as the input changes.

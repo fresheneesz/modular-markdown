@@ -38,7 +38,7 @@ C. Otherwise, copies the file verbatim.
 To create a template, call the `template` function with a function that takes some parameters and returns markdown.
 
 ```javascript
-var {template, textbox, /* other imports... */} = require("../modular-markdown")
+var {template, combobox, /* other imports... */} = require("../modular-markdown")
 
 module.exports = template(function(exampleParam1, exampleParam2) {
 	return `
@@ -94,7 +94,7 @@ module.exports = exampleTemplate('example arg1', 'example arg2', function(exampl
 A markdown template can have up to one list of inputs. These are inputs that a user can interact with to change the page. When a template is inherited from another, its input list is also inherited.
 
 ```javascript
-var {template, inputs, textbox, combobox} = require("modular-markdown")
+var {template, inputs, combobox} = require("modular-markdown")
 
 module.exports = template(function() {
 	return `
@@ -102,9 +102,9 @@ module.exports = template(function() {
 		
 		${this.inputs({
         	Input1: {input: combobox({values: ['1', '2', '3']})},
-        	Input2: {input: textbox()},
-        	Input3: {input: textbox()},
-        	Input4: {input: textbox()}
+        	Input2: {input: combobox()},
+        	Input3: {input: combobox()},
+        	Input4: {input: combobox()}
     	})}
 	`
 }))
@@ -144,8 +144,6 @@ module.exports = exampleTemplate(function() {
 
 The following functions create input element descriptors intended to be passed into `this.inputs`.
 
-* `textbox({defaultValue, link}})`
-  * `defaultValue` - A default value to insert.
 * `combobox({defaultValue, values, link})` - A textbox with dropdown options.
   * `defaultValue` - A default value to insert.
   * `values` - An array of values to display for the combobox.
@@ -167,7 +165,7 @@ The following functions create input element descriptors intended to be passed i
 * `hidden()` - An input element that won't be displayed. This is intended to be used to hide overridden inputs. 
 * `override(inputElementDescriptor, mapInputDescriptor)` - Overridden inputs must use this element. This overrides the name for use in the current template and mapping a value to the overridden input in the parent template. 
   * `inputElementDescriptor` - An input element descriptor that will replace the overridden one. 
-  * `mapInputDescriptor` - If the `mapInputDescriptor` is the return value of the `mapInputs` function, it will map the described inputs to the overridden input. If it is not a function, it will use the passed value as the value to set for the overridden input.
+  * `mapInputDescriptor` - (*Default: mapInputs(v=>v)*) If the `mapInputDescriptor` is the return value of the `mapInputs` function, it will map the described inputs to the overridden input. If it is not a function, it will use the passed value as the value to set for the overridden input.
     * `mapInputs(inputName1, inputName2, ..., mapFunction)` - Returns a descriptor that describes how to map inputs from the current template to an input of the parent template.
       * `inputName1`, `inputName2`, etc - Each of these should be the name of an input that the overridden input depends on.
       * `mapFunction(input1Value, input2Value, etc)` - A function whose return value will be used to set the value of the overridden input. Each function parameter is the value of the input corresponding to the names from the first arguments to `mapInputs` in the same order. **Note** that this function will be **called at runtime** and so doesn't have access to any template modules or variables (and should only really use other inputs to generate the resulting value.)

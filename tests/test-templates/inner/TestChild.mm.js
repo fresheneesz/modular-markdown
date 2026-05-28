@@ -8,6 +8,8 @@ module.exports = basicTemplate('test param', function() {
         
         Original textbox 1 content: ${this.input("Textbox 1").value}
         
+        Original Combobox 1 content: ${this.input("Combobox 1").value}
+        
         New textbox 2 content: ${this.input("Textbox 2").value}
         
         New combobox 2 content: ${this.input("Combobox 2").value}
@@ -29,8 +31,9 @@ module.exports = basicTemplate('test param', function() {
         Inputs earlier:
 
         ${this.inputs({
+            "Textbox 1": {input: override(combobox({defaultValue: 'moose2'}))},
             "Textbox 2": {input: override(
-              textbox({defaultValue: "new text"}), 
+              combobox({defaultValue: "new text"}), 
               mapInputs("Textbox 2", "Combobox 1", function(BValue, CValue) {
                 return 'overriding yo ('+BValue+' '+CValue+')'
               })
@@ -39,7 +42,7 @@ module.exports = basicTemplate('test param', function() {
                 values: ['999', '99999']
             }))},
             "Textbox List 2": {input: override(list({
-                type: 'textbox',
+                type: 'combobox',
                 subargs: {defaultValue: 'item value'}
               }), mapInputs("Textbox List 2", 
                 function(listItems) {
@@ -48,16 +51,16 @@ module.exports = basicTemplate('test param', function() {
               )
             )},
             "Textbox Map 2": {input: override(map({
-                valueType: 'textbox', keyType: 'textbox',
+                valueType: 'combobox', keyType: 'combobox',
               }), mapInputs("Textbox Map 2", function(mapItems) {
                 return [{key: 34, value: 'moose'}]
                 // return [...mapItems, {key: 34, value: 'moose'}]
             }))},
             "Textbox Map 4": {input: map({
-              valueType: 'textbox', keyType: 'textbox',
+              valueType: 'combobox', keyType: 'combobox',
               defaultValue: [{key:'A', value: 'B'}],
             })},
-            "Textbox In Child": {input: textbox()},
+            "Textbox In Child": {input: combobox()},
             "Textbox List 1": { input: override(hidden(), mapInputs("Textbox 1", function(textbox1){
               return [textbox1]
             }))}
@@ -68,6 +71,9 @@ module.exports = basicTemplate('test param', function() {
         ##b Section A
 
         First      
+
+        ##n Move me from below Section B to above it
+        ## Move me from below Section B to above it
 
         ##a Section B
 

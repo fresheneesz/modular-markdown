@@ -48,6 +48,7 @@ const template = exports.template = function(callback) {
                 parentInputId, mapInputDescriptor
               }}
             )
+          // If the input is not in the child input list but is in the parent.
           } else if (!(inputName in originalInputMap)) {
             const parentInputId = parentTemplateFunction.registeredInputs[inputName]
             const mapInputDescriptor = {mapFunction: JSON.stringify(identity.toString()), inputNames:[inputName]}
@@ -244,13 +245,13 @@ function processInputDescriptor(inputListId, id, {_type, ...options}, overrideIn
 
 
 // For each of these names, this creates an input descriptor for the input type.
-;['textbox', 'list', 'map', 'hidden'].forEach(name => {
+;['list', 'map', 'hidden'].forEach(name => {
   exports[name] = function(options) {
     return {_type: name, ...options}
   }
 })
 
-exports.combobox = function(options) {
+exports.combobox = function(options={}) {
   options.listId = getId()
   return {_type: 'combobox', ...options}
 }
