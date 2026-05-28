@@ -2,7 +2,7 @@ var fs = require("fs").promises
 var path = require("path")
 var url = require('url')
 
-var marked = require("marked")
+var {marked} = require("marked")
 var fwalk = require('kc-fwalk')
 
 exports.processDirectory = async function(inputRoot, outputRoot, {templateExtension = ".mm.js", ignorePaths = []} = {}) {

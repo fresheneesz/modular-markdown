@@ -1,6 +1,13 @@
 var url = require('url')
+var UglifyJS = require("uglify-js")
 
-var marked = require("marked")
+// Hide warning caused by using require on marked
+process.removeAllListeners('warning').on('warning', err => {
+    if (err.name !== 'ExperimentalWarning' && !err.message.includes('marked.esm.js using require()')) {
+        console.warn(err)
+    }
+})
+var {marked} = require("marked")
 
 var {createPage} = require("./markdown-merge")
 var {trimIndent, trimFinalEmptyLine, findMainIndent, strmult} = require("./template-utils")
@@ -113,10 +120,11 @@ const template = exports.template = function(callback) {
 
           // mappingFn(value) - A function that maps the received value to some text.
           map: function(mappingFn) {
-            return "<span id='"+valueId+"'></span>"+
-            "<script>"+
-              "inputMapping("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", "+valueId+", "+mappingFn.toString()+")" +
-            "</script>"
+            return "<script>"+
+              "inputMapping("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", "+valueId+", "+minify(mappingFn.toString())+")" +
+            "</script>"+
+            // This is put after the related script because of this bug: https://github.com/markedjs/marked/issues/3981
+            "<span id='"+valueId+"'></span>"
           }
         }
       }
@@ -133,6 +141,21 @@ const template = exports.template = function(callback) {
     return `<script>
       runInitializers()
     </script>`
+  }
+
+  function generateHtmlForTemplateFunction(templateFunction, baseDirectoryPath) {
+    // A map of input ids to input maps. The input id identifies the 'inputs' html list elmeent
+    // (differentiating an ancestor list from descendant lists).
+    // Each input map maps an input name to a unique ID of the input html element
+    const inputRegistry = {}
+    // Generate the content before creating the runtime inputRegistryVariable, so inputRegistry is populated first.
+    const generatedContent = templateFunction._generate(inputRegistry)
+
+    return generateHtml(
+      createGlobalItems(inputRegistry) +
+      marked(generatedContent) +
+      createRunInitializersCode(),
+      baseDirectoryPath)
   }
 
   const templateFunction = function(...args) {
@@ -155,18 +178,7 @@ const template = exports.template = function(callback) {
 
     // External generate, initializes the whole page.
     innerTemplateFunction.generate = function(baseDirectoryPath) {
-      // A map of input ids to input maps. The input id identifies the 'inputs' html list elmeent
-      // (differentiating an ancestor list from descendant lists).
-      // Each input map maps an input name to a unique ID of the input html element
-      const inputRegistry = {}
-      // Generate the content before creating the runtime inputRegistryVariable, so inputRegistry is populated first.
-      const generatedContent = innerTemplateFunction._generate(inputRegistry)
-
-      return generateHtml(
-        createGlobalItems(inputRegistry) +
-        marked(generatedContent) +
-        createRunInitializersCode(),
-        baseDirectoryPath)
+      return generateHtmlForTemplateFunction(innerTemplateFunction, baseDirectoryPath)
     }
 
     return innerTemplateFunction
@@ -183,15 +195,7 @@ const template = exports.template = function(callback) {
 
   // External generate, initializes the whole page.
   templateFunction.generate = function(baseDirectoryPath) {
-    const inputRegistry = {}
-    // Generate the content before creating the runtime inputRegistryVariable, so inputRegistry is populated first.
-    const generatedContent = templateFunction._generate(inputRegistry)
-
-    return generateHtml(
-      createGlobalItems(inputRegistry) +
-      marked(generatedContent) +
-      createRunInitializersCode(),
-      baseDirectoryPath)
+    return generateHtmlForTemplateFunction(templateFunction, baseDirectoryPath)
   }
 
   return templateFunction
@@ -267,6 +271,11 @@ exports.mapInputs = function(...args) {
   return {mapFunction: JSON.stringify(mapFunction.toString()), inputNames}
 }
 
+function minify(string) {
+  var code = UglifyJS.minify(string, {compress:{dead_code: false, side_effects:false}, output: {semicolons: true}}).code
+  // Remove the final semi colon if it added it
+  return code.endsWith(";") ? code.slice(0, -1) : code
+}
 
 var globalId = 0
 function getId() {

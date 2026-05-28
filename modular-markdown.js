@@ -1,5 +1,3 @@
-var marked = require("marked")
-
 var templateFunctions = require("./template-functions")
 var processFiles = require("./process-files")
 

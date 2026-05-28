@@ -1,12 +1,13 @@
 { "name": "modular-markdown",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "main": "modular-markdown.js",
   "dependencies": {
     "emitter-b": "^1.0.0",
     "proto": "^1.0.19",
     "event-emitter": "^0.3.5",
-    "marked": "^1.1.0",
-    "kc-fwalk": "^1.0.5"
+    "marked": "18",
+    "kc-fwalk": "^1.0.5",
+    "uglify-js": "3"
   },
   "devDependencies": {
     "webpack": "5",
