@@ -41,7 +41,9 @@ const template = exports.template = function(callback) {
           // Process the input descriptor.
           if (inputDescriptor._type === 'override') {
             const parentInputId = parentTemplateFunction.registeredInputs[inputName]
-            const mapInputDescriptor = inputDescriptor.mapInputDescriptor
+            const mapInputDescriptor = inputDescriptor.mapInputDescriptor || {
+              mapFunction: JSON.stringify(identity.toString()), inputNames:[inputName]
+            }
             var inputContent = processInputDescriptor(
               templateFunction.inputListId, id, {_type: 'override', options: {
                 subInputDescriptor: inputDescriptor.subInputDescriptor,
