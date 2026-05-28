@@ -27,7 +27,7 @@ module.exports = template(function(parameter) {
         Section A text
 
         ## Section B
-        Section B text
+        Section B text and [link](whatever)
         
         ## Move me from below Section B to above it
         
@@ -35,7 +35,7 @@ module.exports = template(function(parameter) {
         
         ${this.inputs({
             "Textbox 1": {
-              link: 'http://www.google.com', desc: "This describes what the textbox is for.", 
+              link: 'http://www.google.com', desc: "This describes what the textbox is for. [link in desc](whatever)", 
               input: combobox({defaultValue: 'moose'})
             },
             "Textbox 2": {input: combobox({defaultValue: 'moose'})},

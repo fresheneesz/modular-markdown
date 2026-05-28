@@ -203,7 +203,8 @@ const template = exports.template = function(callback) {
 
 // Takes in markdown text and generates an html file from it.
 function generateHtml(body, baseDirectoryPath) {
-  marked.use({renderer: {link: function(href, title, text) {
+  marked.use({renderer: {link: function(hrefInfo, title, text) {
+    var href = hrefInfo.href
     var parsedUrl = url.parse(href)
     if(!parsedUrl.protocol && parsedUrl.path && parsedUrl.path.slice(-3) === ".md") {
       // Replace local markdown links with the path to the html version
