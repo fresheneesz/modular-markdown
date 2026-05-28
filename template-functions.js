@@ -16,6 +16,9 @@ const template = exports.template = function(callback) {
             if (inputDescriptor._type !== 'override' && inputName in parentTemplateFunction.registeredInputs) {
               throw new Error(`Name has already been used for input: '${inputName}'. If you want to override an input from a parent template, use 'override'.`)
             }
+            if (inputDescriptor._type === 'override' && !(inputName in parentTemplateFunction.registeredInputs)) {
+              throw new Error(`Invalid use of override for input: '${inputName}'. No input with that name in the parent template.`)
+            }
           }
 
           var inputMap = {...parentTemplateFunction.inputMap, ...originalInputMap}
@@ -39,27 +42,20 @@ const template = exports.template = function(callback) {
           }
 
           // Process the input descriptor.
-          if (inputDescriptor._type === 'override') {
+          var override = inputDescriptor._type === 'override'
+          var notOverriddenInChild = !(inputName in originalInputMap) // If the input is not in the child input list but is in the parent.
+          if (override || notOverriddenInChild) {
             const parentInputId = parentTemplateFunction.registeredInputs[inputName]
-            const mapInputDescriptor = inputDescriptor.mapInputDescriptor || {
-              mapFunction: JSON.stringify(identity.toString()), inputNames:[inputName]
-            }
+            const mapInputDescriptor = override?
+              inputDescriptor.mapInputDescriptor :
+              {mapFunction: JSON.stringify(identity.toString()), inputNames:[inputName]}
+            const subInputDescriptor = override? inputDescriptor.subInputDescriptor : inputDescriptor
             var inputContent = processInputDescriptor(
               templateFunction.inputListId, id, {_type: 'override', options: {
-                subInputDescriptor: inputDescriptor.subInputDescriptor,
-                parentInputId, mapInputDescriptor
+                subInputDescriptor, parentInputId, mapInputDescriptor
               }}
             )
-          // If the input is not in the child input list but is in the parent.
-          } else if (!(inputName in originalInputMap)) {
-            const parentInputId = parentTemplateFunction.registeredInputs[inputName]
-            const mapInputDescriptor = {mapFunction: JSON.stringify(identity.toString()), inputNames:[inputName]}
-            var inputContent = processInputDescriptor(
-              templateFunction.inputListId, id, {_type: 'override', options: {
-                subInputDescriptor: inputDescriptor,
-                parentInputId, mapInputDescriptor
-              }}
-            )
+          // A non-inherited input
           } else {
             var inputContent = processInputDescriptor(templateFunction.inputListId, id, inputDescriptor)
           }
@@ -227,13 +223,7 @@ function generateHtml(body, baseDirectoryPath) {
 // Produces a unique html element that is updated according to the input type.
 // id - A unique integer
 // type - One of the input element names (eg "textbox").
-// overrideInfo - looks like this is unused?
-function processInputDescriptor(inputListId, id, {_type, ...options}, overrideInfo) {
-  if (overrideInfo) {
-    options.parentInputId = overrideInfo.parentInputId
-    options.mapInputDescriptor = overrideInfo.mapInputDescriptor
-  }
-
+function processInputDescriptor(inputListId, id, {_type, ...options}) {
   if(options._inputListId !== undefined) {
     throw new Error("Options already contains an inputListId value, which is needed internally.")
   }

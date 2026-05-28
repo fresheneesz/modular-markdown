@@ -420,20 +420,23 @@ var moduleExports = (function() {
 
     if (options.mapInputDescriptor) {
       eval(`var mapFunction = `+JSON.parse(options.mapInputDescriptor.mapFunction))
-
-      listeners.push(() => {
-        const parentInput = getElementById(options.parentInputId).inputObject
-
-        var inputNodes = options.mapInputDescriptor.inputNames.map((inputName) => getInputNode(_inputListId, inputName))
-        for (const inputNode of inputNodes) {
-          inputNode.inputObject.on('change', function() {
-            parentInput.setValue(mapFunction(
-              ...inputNodes.map((inputNode) => inputNode.inputObject.value())
-            ))
-          })
-        }
-      })
+    } else {
+      var mapFunction = v => v
+      options.mapInputDescriptor = {inputNames: []}
     }
+
+    listeners.push(() => {
+      const parentInput = getElementById(options.parentInputId).inputObject
+
+      var inputNodes = options.mapInputDescriptor.inputNames.map((inputName) => getInputNode(_inputListId, inputName))
+      for (const inputNode of inputNodes) {
+        inputNode.inputObject.on('change', function() {
+          parentInput.setValue(mapFunction(
+            ...inputNodes.map((inputNode) => inputNode.inputObject.value())
+          ))
+        })
+      }
+    })
   }
 
   // Gets the value of an Input and dynamically changes as the input changes.
