@@ -12,7 +12,7 @@ module.exports = template(function(parameter) {
 
         Original textbox map 2 content: ${this.input("Textbox Map 2").map(v => {return JSON.stringify(v)})}
 
-        Original textbox map 3 content: ${this.input("Textbox Map 3").map(v => {return JSON.stringify(v)})}
+        Original textbox map 3 content: ${this.input("Textbox Map 3").map(function(v) {return JSON.stringify(v)})}
 
         Dynamic markdown test: 
         ${this.input(`Textbox Map 2`).map(configuration => 

@@ -272,8 +272,13 @@ exports.mapInputs = function(...args) {
 }
 
 function minify(string) {
-  var code = UglifyJS.minify(string, {compress:{dead_code: false, side_effects:false}, output: {semicolons: true}}).code
-  // Remove the final semi colon if it added it
+  var prefix = "var f="
+  var result = UglifyJS.minify(prefix + string)//, {compress:{dead_code: false, side_effects:false}, output: {semicolons: true}})
+  if(result.error) {
+    throw new Error(`${result.error.name} minifying ${JSON.stringify(string)}: ${result.error.toString()}`)
+  }
+  // Remove the prefix and final semi colon if it added it
+  var code = result.code.slice(prefix.length)
   return code.endsWith(";") ? code.slice(0, -1) : code
 }
 
