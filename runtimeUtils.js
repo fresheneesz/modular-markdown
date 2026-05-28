@@ -466,7 +466,7 @@ var moduleExports = (function() {
       var inputNode = getInputNode(inputListId, inputName)
       var valueNode = getElementById(valueId)
       inputNode.inputObject.on('change', function() {
-        valueNode.innerHTML = marked(mappingFn(inputNode.inputObject.value()))
+        valueNode.innerHTML = marked(""+mappingFn(inputNode.inputObject.value()))
       })
     })
   }

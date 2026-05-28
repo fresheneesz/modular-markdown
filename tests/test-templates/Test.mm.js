@@ -19,6 +19,8 @@ module.exports = template(function(parameter) {
           configuration.map(({key:items, value:location}) => `* Put ${items} in ${location}`).join('\n')
         )}
 
+        Map to number test: ${this.input("Textbox List 2").map(v => 2)}
+
         # Basic test
 
         The passed parameter: ${parameter}
