@@ -187,9 +187,13 @@ var moduleExports = (function() {
         this.optionsList.style.display = "none"
         this.input.after(this.optionsList)
 
-        this.input.addEventListener("focus", () => {
+        var show = () => {
           this.optionsList.style.display = ""
-        })
+        }
+
+        this.input.addEventListener("focus", show)
+        this.input.addEventListener("mousedown", show)
+        this.input.addEventListener("pointerdown", show)
 
         addCrossDeviceClickListener(document, event => {
           if(!eventIsOverElement(event, this.optionsList) && !eventIsOverElement(event, this.input)) {
