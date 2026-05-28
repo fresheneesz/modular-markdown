@@ -35,7 +35,7 @@ module.exports = template(function(parameter) {
         
         ${this.inputs({
             "Textbox 1": {
-              link: 'http://www.google.com', desc: "This describes what the textbox is for. [link in desc](whatever)", 
+              link: 'http://www.google.com', desc: "This describes what the textbox is for. [link in desc](whatever) and "+this.input("Textbox Map 2").value, 
               input: combobox({defaultValue: 'moose'})
             },
             "Textbox 2": {input: combobox({defaultValue: 'moose'})},
