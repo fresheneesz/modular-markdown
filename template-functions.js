@@ -62,7 +62,7 @@ const template = exports.template = function(callback) {
           var notOverriddenInChild = !(inputName in originalInputMap) // If the input is not in the child input list but is in the parent.
           if (override || notOverriddenInChild) {
             const parentInputId = parentTemplateFunction.registeredInputs[inputName]
-            const mapInputDescriptor = override?
+            let mapInputDescriptor = inputDescriptor.mapInputDescriptor?
               inputDescriptor.mapInputDescriptor :
               {mapFunction: JSON.stringify(identity.toString()), inputNames:[inputName]}
             const subInputDescriptor = override? inputDescriptor.subInputDescriptor : inputDescriptor

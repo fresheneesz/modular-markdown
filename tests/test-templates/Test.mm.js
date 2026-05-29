@@ -4,6 +4,10 @@ module.exports = template(function(parameter) {
     return `
         Top text test
 
+        Original textbox 1 content: ${this.input("Textbox 1").value}
+        
+        Original Combobox 1 content: ${this.input("Combobox 1").value}
+        
         Original textbox 2 content: ${this.input("Textbox 2").value}
 
         Original combobox 2 content: ${this.input("Combobox 2").value}

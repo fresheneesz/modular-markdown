@@ -433,12 +433,7 @@ var moduleExports = (function() {
     const overridingInputClass = eval(options.subInputDescriptor._type)
     overridingInputClass({id, ...options.subInputDescriptor})
 
-    if (options.mapInputDescriptor) {
-      eval(`var mapFunction = `+JSON.parse(options.mapInputDescriptor.mapFunction))
-    } else {
-      var mapFunction = v => v
-      options.mapInputDescriptor = {inputNames: []}
-    }
+    eval(`var mapFunction = `+JSON.parse(options.mapInputDescriptor.mapFunction))
 
     listeners.push(() => {
       const parentInput = getElementById(options.parentInputId).inputObject

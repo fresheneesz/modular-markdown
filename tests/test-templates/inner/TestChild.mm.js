@@ -6,9 +6,9 @@ module.exports = basicTemplate('test param', function() {
     return `
         Adding this
         
-        Original textbox 1 content: ${this.input("Textbox 1").value}
+        New textbox 1 content: ${this.input("Textbox 1").value}
         
-        Original Combobox 1 content: ${this.input("Combobox 1").value}
+        New Combobox 1 content: ${this.input("Combobox 1").value}
         
         New textbox 2 content: ${this.input("Textbox 2").value}
         
