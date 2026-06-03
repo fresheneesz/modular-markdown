@@ -1,5 +1,5 @@
 { "name": "modular-markdown",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "main": "modular-markdown.js",
   "dependencies": {
     "emitter-b": "^1.0.0",
@@ -7,7 +7,9 @@
     "event-emitter": "^0.3.5",
     "marked": "18",
     "kc-fwalk": "^1.0.5",
-    "uglify-js": "3"
+    "uglify-js": "3",
+    "markdown-toc": "*",
+    "marked-gfm-heading-id": "*"
   },
   "devDependencies": {
     "webpack": "5",

@@ -178,6 +178,10 @@ An active element changes based on the value of an input (or inputs).
   * `value` - This returns html that will actively update to the input value when the input value changes.
   * `map(callback)` - This will return an html element that will actively update. When the input value changes, the `callback` will be called with the input's value, and the active html element will get the value returned from the `callback`.  **Note** that this function will be **called at runtime** and so doesn't have access to any template modules or variables (and should only really use other inputs to generate the resulting value.)
 
+### Table of contents
+
+Add the tag `<!-- toc -->` on a line where you want to insert a table of contents.
+
 ### Developing modular-markdown
 
 * Run `node build.js` to update the generated `runtimeUtils` bundle in dist. 

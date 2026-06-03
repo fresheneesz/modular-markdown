@@ -1,18 +1,22 @@
-var UglifyJS = require("uglify-js")
-var {markedLinkProcessor} = require("./sharedUtils")
-
-const inputClassPrefix="MM_INPUT_"
-
 // Hide warning caused by using require on marked
 process.removeAllListeners('warning').on('warning', err => {
     if (err.name !== 'ExperimentalWarning' && !err.message.includes('marked.esm.js using require()')) {
         console.warn(err)
     }
 })
+
+var UglifyJS = require("uglify-js")
 var {marked} = require("marked")
+var {gfmHeadingId} = require('marked-gfm-heading-id')
+var toc = require('markdown-toc')
+
+var {markedLinkProcessor} = require("./sharedUtils")
 
 // Replace local markdown links with the path to the html version
 marked.use({renderer: {link: markedLinkProcessor}})
+marked.use(gfmHeadingId())
+
+const inputClassPrefix="MM_INPUT_"
 
 var {createPage} = require("./markdown-merge")
 var {trimIndent, trimFinalEmptyLine, findMainIndent, strmult} = require("./template-utils")
@@ -161,7 +165,7 @@ const template = exports.template = function(callback) {
 
     return generateHtml(
       createGlobalItems(inputRegistry) +
-      marked(generatedContent) +
+      marked(toc.insert(generatedContent, {maxdepth: 3})) +
       createRunInitializersCode(),
       baseDirectoryPath)
   }

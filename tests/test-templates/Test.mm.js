@@ -4,6 +4,8 @@ module.exports = template(function(parameter) {
     return `
         # Test
         
+        <!-- toc -->
+        
         Top text test. [Test doc link](test-doc.md). And [External doc link](https://github.com/kopia/kopia/blob/master/README.md)
 
         Original textbox 1 content: ${this.input("Textbox 1").value}
