@@ -5,6 +5,8 @@ var url = require('url')
 var {marked} = require("marked")
 var fwalk = require('kc-fwalk')
 
+var {generateHtml} = require("./template-functions")
+
 exports.processDirectory = async function(inputRoot, outputRoot, {templateExtension = ".mm.js", ignorePaths = []} = {}) {
     await fs.mkdir(outputRoot, {recursive: true})
     await fs.copyFile(__dirname+"/dist/darkstyle.css", outputRoot+"/darkstyle.css")
@@ -43,7 +45,7 @@ var processFile = exports.processFile = async function (filename, templateExtens
         if(isTemplate) {
             var resultingHtml = require(normalizePathSep(sourceFilePath)).generate(baseDirectoryPath)
         } else if(isMarkdown) {
-            var resultingHtml = marked((await fs.readFile(sourceFilePath)).toString())
+            var resultingHtml = generateHtml(marked((await fs.readFile(sourceFilePath)).toString()), baseDirectoryPath)
         }
 
         await fs.writeFile(releaseFilePath, resultingHtml)
