@@ -5,6 +5,7 @@ var path = require("path")
 var url = require('url')
 
 const webpack = require("webpack")
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 ;(async function() {
 try {
@@ -31,6 +32,9 @@ function build(entryFile, outFile, handleWarnings) {
         optimization: {
           minimize: true,
         },
+        plugins: [
+          new NodePolyfillPlugin()
+        ]
       },
       (err, stats) => {
         if (err) return reject(err);

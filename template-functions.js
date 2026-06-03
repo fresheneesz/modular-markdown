@@ -1,5 +1,5 @@
-var url = require('url')
 var UglifyJS = require("uglify-js")
+var {markedLinkProcessor} = require("./sharedUtils")
 
 const inputClassPrefix="MM_INPUT_"
 
@@ -12,13 +12,7 @@ process.removeAllListeners('warning').on('warning', err => {
 var {marked} = require("marked")
 
 // Replace local markdown links with the path to the html version
-marked.use({renderer: {link: function({href, title, text}) {
-  var parsedUrl = url.parse(href)
-  if(!parsedUrl.protocol && parsedUrl.path && parsedUrl.path.slice(-3) === ".md") {
-    href = parsedUrl.path.slice(0, -3)+".html"+(parsedUrl.hash?parsedUrl.hash:'')
-  }
-  return "<a href='"+href+"'>"+text+"</a>"
-}}})
+marked.use({renderer: {link: markedLinkProcessor}})
 
 var {createPage} = require("./markdown-merge")
 var {trimIndent, trimFinalEmptyLine, findMainIndent, strmult} = require("./template-utils")
@@ -55,7 +49,7 @@ const template = exports.template = function(callback) {
 
           var label = inputName
           if (link !== undefined) {
-            label = "<a href='"+link+"'>"+label+'</a>'
+            label = markedLinkProcessor({href: link, text: label})
             delete inputDescriptor.link // Remove it from the arguments.
           }
 

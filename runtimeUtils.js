@@ -4,9 +4,12 @@ var proto = require('proto')
 var EmitterB = require('emitter-b')
 var {marked} = require("marked")
 
+var {markedLinkProcessor} = require("./sharedUtils")
+
 // Marked is only used for dynamic input mappings, which are intended to basically be inline. So don't add paragraph tags.
 marked.use({
   renderer: {
+    link: markedLinkProcessor,
     paragraph({ tokens }) {
       return this.parser.parseInline(tokens)
     }

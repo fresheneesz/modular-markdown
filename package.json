@@ -1,5 +1,5 @@
 { "name": "modular-markdown",
-  "version": "1.5.14",
+  "version": "1.5.16",
   "main": "modular-markdown.js",
   "dependencies": {
     "emitter-b": "^1.0.0",
@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "webpack": "5",
+    "node-polyfill-webpack-plugin": "*",
     "deadunit": "*"
   }
 }

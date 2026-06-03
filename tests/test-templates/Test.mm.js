@@ -4,7 +4,7 @@ module.exports = template(function(parameter) {
     return `
         # Test
         
-        Top text test
+        Top text test. [Test doc link](test-doc.md). And [External doc link](https://github.com/kopia/kopia/blob/master/README.md)
 
         Original textbox 1 content: ${this.input("Textbox 1").value}
         
@@ -35,7 +35,7 @@ module.exports = template(function(parameter) {
         Section A text
 
         ## Section B
-        Section B text and [link](whatever)
+        Section B text
         
         ## Move me from below Section B to above it
         
@@ -43,12 +43,12 @@ module.exports = template(function(parameter) {
         
         ${this.inputs({
             "Textbox 1": {
-              link: 'http://www.google.com', desc: "This describes what the textbox is for. [link in desc](whatever) and "+this.input("Textbox Map 2").value, 
+              link: 'test-doc.md', desc: "This describes what the textbox is for. [link in desc](test-doc.md) and "+this.input("Textbox Map 2").value, 
               input: combobox({defaultValue: 'moose'})
             },
             "Textbox 2": {input: combobox({defaultValue: 'moose'}), desc: "Original textbox 1 content in desc: "+this.input("Textbox 1").value},
             "Unoverridden textbox": {input: combobox({defaultValue: 'unoverridden'}), desc: "Original textbox 1 content in desc: "+this.input("Textbox 1").value},
-            "Combobox 1": {link: 'http://www.google.com', 
+            "Combobox 1": {
               input: combobox({
                 defaultValue: '100',
                 values: ['50', '80', '100', '120']
