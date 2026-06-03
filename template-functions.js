@@ -121,18 +121,19 @@ const template = exports.template = function(callback) {
         return `<div id='${templateFunction.inputListId}'>${renderedInputList}</div>` + hideScript
       },
       input: function(inputName) {
-        var classname = escapeClassName(inputClassPrefix+inputName)
+        const valueId = getId()
+        var classname = JSON.stringify(escapeClassName(inputClassPrefix+valueId))
         return {
-          value: "<span class='"+classname+"'></span>"+
-            "<script>"+"input("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", '"+classname+"')</script>",
+          value: "<span class="+classname+"></span>"+
+            "<script>"+"input("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", "+classname+")</script>",
 
           // mappingFn(value) - A function that maps the received value to some text.
           map: function(mappingFn) {
             return "<script>"+
-              "inputMapping("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", '"+classname+"', "+minify(mappingFn.toString())+")" +
+              "inputMapping("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", "+classname+", "+minify(mappingFn.toString())+")" +
             "</script>"+
             // This is put after the related script because of this bug: https://github.com/markedjs/marked/issues/3981
-            "<span class='"+classname+"'></span>"
+            "<span class="+classname+"></span>"
           }
         }
       }

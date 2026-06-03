@@ -101,6 +101,12 @@ module.exports = template(function(parameter) {
             },
         })}
 
+        Make sure this says "moose": ${this.input("Don't override this").map(v => "moose")}
+        
+        Same input as the above but its actual value: ${this.input("Don't override this").value}
+        
+        Same input as the above but its actual value mapped: ${this.input("Don't override this").map(v => v)}
+
         ## Section R
         This will be replaced
         * Testing final bullet point
