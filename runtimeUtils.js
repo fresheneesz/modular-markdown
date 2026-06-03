@@ -70,9 +70,11 @@ var moduleExports = (function() {
   // Required events:
     // change - Should be emitted when the argument is changed.
   var Input = proto(EmitterB, function(superclass) {
-    this.init = function(options) {
+    // parentInputId - The ID of the parent inputRegistry
+    this.init = function(options, parentInputId) {
       superclass.init.apply(this, arguments)
       this.options = this.getArgs(options)
+      this.parentInputId = parentInputId // This will be passed if its a subdescriptor of override
 
       // For subnodes of other nodes, the parent node should set the 'node' option before creating the subnode.
       this.node = this.options.node || getElementById(options.id)
@@ -399,7 +401,7 @@ var moduleExports = (function() {
       var {keyType, valueType, valueArgs, keyArgs} = options
       options.subargs = {keyType, valueType, valueArgs, keyArgs}
       options.type = 'mapItem'
-      superclass.init.call(this, options)
+      superclass.init.apply(this, arguments)
     }
 
     // this.value = function() {
@@ -423,15 +425,22 @@ var moduleExports = (function() {
 
   var hidden = proto(Input, function(superclass) {
     this.init = function(options) {
-      superclass.init.call(this, options)
+      superclass.init.apply(this, arguments)
 
       this.node.parentElement.style.display = "none" // Hide the entry.
+
+      // Set this up asynchronously so the parent input list is ensured to have been created.
+      setTimeout(() => getElementById(this.parentInputId).inputObject.on('change', value => this.emit('change')))
+    }
+
+    this.value = function() {
+      return getElementById(this.parentInputId).inputObject.value()
     }
   })
 
   function override({id, options, _inputListId}) {
     const overridingInputClass = eval(options.subInputDescriptor._type)
-    overridingInputClass({id, ...options.subInputDescriptor})
+    overridingInputClass({id, ...options.subInputDescriptor}, options.parentInputId)
 
     eval(`var mapFunction = `+JSON.parse(options.mapInputDescriptor.mapFunction))
 

@@ -2,6 +2,8 @@ var {template, textbox, combobox, list, map, override, mapInputs} = require("../
 
 module.exports = template(function(parameter) {
     return `
+        # Test
+        
         Top text test
 
         Original textbox 1 content: ${this.input("Textbox 1").value}
@@ -44,7 +46,8 @@ module.exports = template(function(parameter) {
               link: 'http://www.google.com', desc: "This describes what the textbox is for. [link in desc](whatever) and "+this.input("Textbox Map 2").value, 
               input: combobox({defaultValue: 'moose'})
             },
-            "Textbox 2": {input: combobox({defaultValue: 'moose'})},
+            "Textbox 2": {input: combobox({defaultValue: 'moose'}), desc: "Original textbox 1 content in desc: "+this.input("Textbox 1").value},
+            "Unoverridden textbox": {input: combobox({defaultValue: 'unoverridden'}), desc: "Original textbox 1 content in desc: "+this.input("Textbox 1").value},
             "Combobox 1": {link: 'http://www.google.com', 
               input: combobox({
                 defaultValue: '100',

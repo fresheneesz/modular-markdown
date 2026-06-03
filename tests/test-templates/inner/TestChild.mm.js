@@ -4,6 +4,9 @@ var basicTemplate = require("../Test.mm.js")
 
 module.exports = basicTemplate('test param', function() {
     return `
+        #n Test
+        # Test Child
+      
         Adding this
         
         New textbox 1 content: ${this.input("Textbox 1").value}
