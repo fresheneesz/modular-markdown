@@ -4,8 +4,6 @@ var proto = require('proto')
 var EmitterB = require('emitter-b')
 var {marked} = require("marked")
 
-var shared = require('./shared')
-
 // Marked is only used for dynamic input mappings, which are intended to basically be inline. So don't add paragraph tags.
 marked.use({
   renderer: {
@@ -469,12 +467,15 @@ var moduleExports = (function() {
     })
   }
 
-  function inputMapping(inputListId, inputName, valueId, mappingFn) {
+  function inputMapping(inputListId, inputName, valueNodeClass, mappingFn) {
     listeners.push(() => {
       var inputNode = getInputNode(inputListId, inputName)
-      var valueNode = getElementById(valueId)
+      var valueNodes = document.getElementsByClassName(valueNodeClass)
+      // Note that this isn't super clean as every inherited instance of this will register a duplicate set of change events. This shouldn't generally be a problem tho since there isn't likely to be very many levels of inheritance.
       inputNode.inputObject.on('change', function() {
-        valueNode.innerHTML = marked(""+mappingFn(inputNode.inputObject.value()))
+        for(const node of valueNodes) {
+          node.innerHTML = marked(""+mappingFn(inputNode.inputObject.value()))
+        }
       })
     })
   }

@@ -1,6 +1,8 @@
 var url = require('url')
 var UglifyJS = require("uglify-js")
 
+const inputClassPrefix="MM_INPUT_"
+
 // Hide warning caused by using require on marked
 process.removeAllListeners('warning').on('warning', err => {
     if (err.name !== 'ExperimentalWarning' && !err.message.includes('marked.esm.js using require()')) {
@@ -124,16 +126,16 @@ const template = exports.template = function(callback) {
         //   throw new Error(`Input method called on name that doesn't exist: '${inputName}'`)
         // }
         return {
-          value: "<span id='"+valueId+"'></span>"+
-            "<script>"+"input("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", "+valueId+")</script>",
+          value: "<span class='"+inputClassPrefix+inputName+"'></span>"+
+            "<script>"+"input("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", '"+inputClassPrefix+inputName+"')</script>",
 
           // mappingFn(value) - A function that maps the received value to some text.
           map: function(mappingFn) {
             return "<script>"+
-              "inputMapping("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", "+valueId+", "+minify(mappingFn.toString())+")" +
+              "inputMapping("+templateFunction.inputListId+", "+JSON.stringify(inputName)+", '"+inputClassPrefix+inputName+"', "+minify(mappingFn.toString())+")" +
             "</script>"+
             // This is put after the related script because of this bug: https://github.com/markedjs/marked/issues/3981
-            "<span id='"+valueId+"'></span>"
+            "<span id='"+inputClassPrefix+inputName+"'></span>"
           }
         }
       }

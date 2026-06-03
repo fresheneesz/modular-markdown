@@ -93,7 +93,12 @@ module.exports = template(function(parameter) {
               },
               addButtonName: 'Add to Map',
               defaultValue: [{key:'On Your Person', value: ['a','b','c']}]
-            })}
+            })},
+            // To actually test this, you annoyingly need to unhide the child input block so you can see if the input set that's later on the page gets the correct value.
+            "Don't override this": {
+              desc: "Inherit this: "+this.input("Textbox 1").value, 
+              input: combobox()
+            },
         })}
 
         ## Section R
